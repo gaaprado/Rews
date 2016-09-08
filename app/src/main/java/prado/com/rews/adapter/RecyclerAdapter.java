@@ -1,8 +1,10 @@
 package prado.com.rews.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,22 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import prado.com.rews.R;
 import prado.com.rews.controller.FragmentWeb;
 import prado.com.rews.interfaces.ItemTouchHelperAdapter;
+import prado.com.rews.model.ImageDownloaded;
 
 /**
  * Created by Prado on 07/09/2016.
@@ -36,15 +32,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private ArrayList<Submission> array;
     private FragmentTransaction ft;
-    private Context context;
-    private List<String> urls;
+    private ArrayList <ImageDownloaded> images;
+    private View view;
 
-    public RecyclerAdapter(Listing <Submission> array, FragmentTransaction ft, Context context, List<String>urls){
+    public RecyclerAdapter(Listing <Submission> array, FragmentTransaction ft, ArrayList<ImageDownloaded>images){
 
-        this.array = new ArrayList<Submission>();
-        this.ft = ft;
-        this.context = context;
-        this.urls = urls;
+        this.array  = new ArrayList<Submission>();
+        this.ft     = ft;
+        this.images = images;
 
         for(int i=0; i<array.size(); i++){
             this.array.add(array.get(i));
@@ -55,57 +50,41 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_list, parent, false);
+
+
+
+        view                    = inflater.inflate(R.layout.fragment_list, parent, false);
 
         view.setLayoutParams(new RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder   = new ViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
         holder.text.setText(this.array.get(position).getTitle());
 
-        switch(position){
-            case 0:
-                holder.imageView.setImageResource(R.drawable.cannae);
-                break;
-            case 1:
-                holder.imageView.setImageResource(R.drawable.duterte);
-                break;
-            case 2:
-                holder.imageView.setImageResource(R.drawable.burka);
-                break;
-            case 3:
-                holder.imageView.setImageResource(R.drawable.fund);
-                break;
-            default:
-                holder.imageView.setImageResource(R.drawable.imagenf);
-                break;
-        }
-
-        /*final ImageLoader img = ImageLoader.getInstance();
-        img.init(ImageLoaderConfiguration.createDefault(context));
-        ImageSize targetSize = new ImageSize(300, 300);
-        img.loadImage(urls.get(position), targetSize, null, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                try{
-                    img.displayImage(imageUri, holder.imageView);
-                }catch(Exception e){
-
+        if(!images.isEmpty()){
+            for(int i = 0; i < images.size(); i++){
+                if(array.get(position).getId().equals(images.get(i).getId())){
+                    holder.imageView.setImageBitmap(images.get(i).getBitmap());
+                    break;
                 }
             }
+        }
+
+        /*holder.favoriteImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                holder.imageView.setImageResource(R.drawable.imagenf);
+            public void onClick(View v) {
+                holder.favoriteImage.setColorFilter(Color.BLUE);
             }
-        });
-        */
+        });*/
+
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +119,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onItemDismiss(int position) {
         this.array.remove(position);
+        this.images.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -148,13 +128,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         private ImageView imageView;
         private TextView text;
         private CardView cardView;
+        //private ImageView favoriteImage;
+
 
         public ViewHolder(View view) {
             super(view);
 
-            imageView = (ImageView) view.findViewById(R.id.imageCard);
-            text      = (TextView)  view.findViewById(R.id.titleText);
-            cardView  = (CardView)  view.findViewById(R.id.cardView);
+            imageView     = (ImageView) view.findViewById(R.id.imageCard);
+            text          = (TextView)  view.findViewById(R.id.titleText);
+            cardView      = (CardView)  view.findViewById(R.id.cardView);
+            //favoriteImage = (ImageView) view.findViewById(R.id.favorite);
         }
     }
 

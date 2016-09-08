@@ -1,5 +1,6 @@
 package prado.com.rews.controller;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,13 +15,14 @@ import android.view.ViewGroup;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import prado.com.rews.R;
 import prado.com.rews.adapter.RecyclerAdapter;
 import prado.com.rews.helper.ListItemTouchHelper;
 import prado.com.rews.helper.LoadSubmissions;
 import prado.com.rews.interfaces.AsyncResponseResult;
+import prado.com.rews.model.ImageDownloaded;
 
 public class FragmentContent extends Fragment {
 
@@ -52,18 +54,18 @@ public class FragmentContent extends Fragment {
         LoadSubmissions info                      = (LoadSubmissions) new LoadSubmissions(new AsyncResponseResult() {
 
             @Override
-            public void processFinish(Listing <Submission> output, List<String> urls) {
+            public void processFinish(Listing <Submission> output, ArrayList<ImageDownloaded> images) {
 
                 myDataset                         =  output;
                 ft                                = getFragmentManager().beginTransaction();
-                recyclerAdapter                   = new RecyclerAdapter(myDataset, ft, getContext(), urls);
+                recyclerAdapter                   = new RecyclerAdapter(myDataset, ft, images);
                 ItemTouchHelper.Callback callback = new ListItemTouchHelper(recyclerAdapter);
                 ItemTouchHelper itemTouchHelper   = new ItemTouchHelper(callback);
                 itemTouchHelper.attachToRecyclerView(recyclerView);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setAdapter(recyclerAdapter);
             }
-        },view).execute();
+        },view, getContext()).execute();
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
