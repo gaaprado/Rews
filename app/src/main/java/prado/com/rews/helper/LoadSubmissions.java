@@ -15,6 +15,15 @@ import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
 import net.dean.jraw.paginators.TimePeriod;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import prado.com.rews.R;
 import prado.com.rews.interfaces.AsyncResponseResult;
 
@@ -35,6 +44,7 @@ import prado.com.rews.interfaces.AsyncResponseResult;
     private String CLIENT_ID = "9CmpIrj9-g_7kQ";
     private String SECRET = "5hO3cFwOLXRng7j4q_BNgvTYA94";
     private ProgressBar progressBar;
+    private List<String> urls;
 
 
     public LoadSubmissions(AsyncResponseResult delegate, View view){
@@ -65,6 +75,23 @@ import prado.com.rews.interfaces.AsyncResponseResult;
 
         myData = subreddit.next();
 
+        urls = new ArrayList<>();
+
+        /*for(int i=0; i<myData.size(); i++) {
+            Document doc = null;
+            try {
+                String url = "http://newspaper-demo.herokuapp.com/articles/show?url_to_clean=" + myData.get(i).getUrl();
+                doc = Jsoup.connect(url).get();
+                Elements img = doc.getElementsByTag("img");
+                for (Element el : img) {
+                    String src = el.absUrl("src");
+                    urls.add(src);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        */
         return myData;
     }
 
@@ -75,7 +102,7 @@ import prado.com.rews.interfaces.AsyncResponseResult;
 
     @Override
     protected void onPostExecute(Listing<Submission> submissions) {
-        delegate.processFinish(submissions);
+        delegate.processFinish(submissions, urls);
         progressBar.setVisibility(View.GONE);
     }
 }

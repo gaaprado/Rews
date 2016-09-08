@@ -20,8 +20,18 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerView"
             android:scrollbars="vertical">
-
         </android.support.v7.widget.RecyclerView>
+
+      <!--FloatActionButton-->
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/floatingButton"
+            app:srcCompat="@drawable/ic_add"
+            app:backgroundTint="@color/colorAccent"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
 
     </FrameLayout>
 
@@ -30,7 +40,6 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone">
-    </ProgressBar>
+        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

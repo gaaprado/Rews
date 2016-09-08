@@ -1,6 +1,7 @@
 package prado.com.rews.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import prado.com.rews.R;
 import prado.com.rews.controller.FragmentWeb;
@@ -28,11 +36,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private ArrayList<Submission> array;
     private FragmentTransaction ft;
+    private Context context;
+    private List<String> urls;
 
-    public RecyclerAdapter(Listing <Submission> array, FragmentTransaction ft){
+    public RecyclerAdapter(Listing <Submission> array, FragmentTransaction ft, Context context, List<String>urls){
 
         this.array = new ArrayList<Submission>();
         this.ft = ft;
+        this.context = context;
+        this.urls = urls;
 
         for(int i=0; i<array.size(); i++){
             this.array.add(array.get(i));
@@ -55,8 +67,45 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.text.setText(this.array.get(position).getTitle());
+
+        switch(position){
+            case 0:
+                holder.imageView.setImageResource(R.drawable.cannae);
+                break;
+            case 1:
+                holder.imageView.setImageResource(R.drawable.duterte);
+                break;
+            case 2:
+                holder.imageView.setImageResource(R.drawable.burka);
+                break;
+            case 3:
+                holder.imageView.setImageResource(R.drawable.fund);
+                break;
+            default:
+                holder.imageView.setImageResource(R.drawable.imagenf);
+                break;
+        }
+
+        /*final ImageLoader img = ImageLoader.getInstance();
+        img.init(ImageLoaderConfiguration.createDefault(context));
+        ImageSize targetSize = new ImageSize(300, 300);
+        img.loadImage(urls.get(position), targetSize, null, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                try{
+                    img.displayImage(imageUri, holder.imageView);
+                }catch(Exception e){
+
+                }
+            }
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                holder.imageView.setImageResource(R.drawable.imagenf);
+            }
+        });
+        */
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
