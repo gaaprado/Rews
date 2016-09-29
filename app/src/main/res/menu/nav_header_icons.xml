@@ -9,21 +9,24 @@
             <menu>
                 <item
                     android:id="@+id/nav_brazil"
+                    android:icon="@drawable/ic_brazil"
                     android:title="Brazil"/>
                 <item
                     android:id="@+id/nav_usa"
                     android:title="USA"/>
                 <item
                     android:id="@+id/nav_canada"
+                    android:icon="@drawable/ic_canada"
                     android:title="Canada" />
                 <item
                     android:id="@+id/nav_la"
+                    android:icon="@drawable/ic_latinamerica"
                     android:title="Latin America"/>
             </menu>
         </item>
     </group>
 
-    <item android:title="Settings">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/nav_send"
