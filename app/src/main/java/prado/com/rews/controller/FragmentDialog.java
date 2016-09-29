@@ -19,9 +19,15 @@ import prado.com.rews.R;
 
 public class FragmentDialog extends DialogFragment{
 
-    static FragmentDialog newInstance(){
+    private static String type;
 
-        FragmentDialog frag = new FragmentDialog();
+    public FragmentDialog(String type){
+        this.type = type;
+    }
+
+    static FragmentDialog newInstance(String type){
+
+        FragmentDialog frag = new FragmentDialog(type);
         frag.setStyle(STYLE_NO_TITLE, 0);
 
         return frag;
@@ -34,7 +40,13 @@ public class FragmentDialog extends DialogFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dialog, container, false);
+
+        View view = null;
+        if(type.equals("sort")){
+            view = inflater.inflate(R.layout.fragment_dialog, container, false);
+        } else if(type.equals("share")) {
+            view = inflater.inflate(R.layout.dialog_share, container, false);
+        }
         return view;
     }
 

@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_reddit_guest"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
         tools:ignore="ContentDescription"/>
 
@@ -28,8 +27,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="70dp"
         android:text="@string/guest"
+        android:textSize="14sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:layout_centerHorizontal="true"
         tools:ignore="RtlHardcoded" />
 
 </RelativeLayout>

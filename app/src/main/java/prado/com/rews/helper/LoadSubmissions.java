@@ -83,7 +83,7 @@ import prado.com.rews.model.UrlDownloaded;
         SubredditPaginator subreddit = new SubredditPaginator(redditClient);
 
         subreddit.setSubreddit("worldnews");
-        subreddit.setLimit(8);
+        subreddit.setLimit(3);
         subreddit.setTimePeriod(TimePeriod.DAY);
         subreddit.setSorting(Sorting.HOT);
 

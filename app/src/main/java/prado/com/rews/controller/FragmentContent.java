@@ -1,6 +1,7 @@
 package prado.com.rews.controller;
 
-import android.graphics.Bitmap;
+import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
@@ -33,6 +35,7 @@ public class FragmentContent extends Fragment {
     private FragmentTransaction ft;
     private View view;
     private FloatingActionButton floatingActionButton;
+    private ArrayList<Submission> array;
 
     public FragmentContent() {
     }
@@ -64,6 +67,12 @@ public class FragmentContent extends Fragment {
                 itemTouchHelper.attachToRecyclerView(recyclerView);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setAdapter(recyclerAdapter);
+
+                array = new ArrayList<Submission>();
+                for(int i =0; i<myDataset.size(); i++){
+                    array.add(myDataset.get(i));
+                }
+
             }
         },view, getContext()).execute();
 
@@ -72,6 +81,7 @@ public class FragmentContent extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.content_main, new FragmentWeb("https://www.reddit.com/login"));
                 ft.addToBackStack(null);
@@ -93,6 +103,23 @@ public class FragmentContent extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's state here
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Bundle bundle = new Bundle();
+        //bundle.putParcelableArray(array);
+        //outState.pu
     }
 
 }
