@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new FragmentContent());
+        ft.replace(R.id.content_main, new FragmentContent(""));
         ft.commit();
     }
 
@@ -86,6 +86,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        String sr;
+        switch (id){
+            case R.id.nav_brazil:
+                sr = "Brasil";
+                break;
+            case R.id.nav_usa:
+                sr = "usanews";
+                break;
+            case R.id.nav_canada:
+                sr = "canada";
+                break;
+            case R.id.nav_la:
+                sr = "LatinAmerica";
+                break;
+            default:
+                sr = "";
+        }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, new FragmentContent(sr));
+        ft.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

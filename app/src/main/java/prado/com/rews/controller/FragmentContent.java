@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,8 +39,13 @@ public class FragmentContent extends Fragment {
     private View view;
     private FloatingActionButton floatingActionButton;
     private ArrayList<Submission> array;
+    private String subReddit;
 
     public FragmentContent() {
+    }
+
+    public FragmentContent(String subReddit){
+        this.subReddit = subReddit;
     }
 
     @Override
@@ -74,7 +82,7 @@ public class FragmentContent extends Fragment {
                 }
 
             }
-        },view, getContext()).execute();
+        },view, subReddit, getContext()).execute();
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -121,5 +129,6 @@ public class FragmentContent extends Fragment {
         //bundle.putParcelableArray(array);
         //outState.pu
     }
+
 
 }

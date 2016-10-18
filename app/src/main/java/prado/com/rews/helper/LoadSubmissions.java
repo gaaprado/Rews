@@ -58,15 +58,17 @@ import prado.com.rews.model.UrlDownloaded;
     private String PASSWORD              = "gameteoroa1";
     private String CLIENT_ID             = "9CmpIrj9-g_7kQ";
     private String SECRET                = "5hO3cFwOLXRng7j4q_BNgvTYA94";
+    private String subReddit             = "";
     private int aux = 0;
 
-    public LoadSubmissions(AsyncResponseResult delegate, View view, Context context){
+    public LoadSubmissions(AsyncResponseResult delegate, View view, String subReddit, Context context){
         this.delegate     = delegate;
         this.user         = UserAgent.of("Guest");
         this.redditClient = new RedditClient(user);
         this.CREDENTIALS  = Credentials.script(USERNAME, PASSWORD, CLIENT_ID, SECRET);
         this.progressBar  = (ProgressBar) view.findViewById(R.id.ProgressBar);
         this.context      = context;
+        this.subReddit    = subReddit;
     }
 
     @Override
@@ -81,8 +83,11 @@ import prado.com.rews.model.UrlDownloaded;
         }
 
         SubredditPaginator subreddit = new SubredditPaginator(redditClient);
-
-        subreddit.setSubreddit("worldnews");
+        if(subReddit.equals("")){
+            subreddit.setSubreddit("worldnews");
+        }else{
+            subreddit.setSubreddit(subReddit);
+        }
         subreddit.setLimit(3);
         subreddit.setTimePeriod(TimePeriod.DAY);
         subreddit.setSorting(Sorting.HOT);
