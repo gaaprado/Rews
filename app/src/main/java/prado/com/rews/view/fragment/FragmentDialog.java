@@ -1,4 +1,4 @@
-package prado.com.rews.controller;
+package prado.com.rews.view.fragment;
 
 /**
  * Created by Prado on 07/09/2016.
@@ -25,7 +25,7 @@ public class FragmentDialog extends DialogFragment{
         this.type = type;
     }
 
-    static FragmentDialog newInstance(String type){
+    public static FragmentDialog newInstance(String type){
 
         FragmentDialog frag = new FragmentDialog(type);
         frag.setStyle(STYLE_NO_TITLE, 0);
