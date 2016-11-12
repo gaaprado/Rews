@@ -87,6 +87,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             }
         });
 
+        holder.share.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                        "Notícia: " + array.get(position).getTitle() + "\n\nLink: " + array.get(position).getUrl());
+                sendIntent.setType("text/plain");
+                activity.startActivity(sendIntent);
+            }
+        });
+
         loadSubmissions = (LoadSubmissions) new LoadSubmissions(new AsyncResponseResult() {
 
             @Override
