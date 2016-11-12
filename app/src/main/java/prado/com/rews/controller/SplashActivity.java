@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import prado.com.rews.R;
+import prado.com.rews.view.MainActivity;
 
 /**
  * Created by julianodotto on 19/10/16.

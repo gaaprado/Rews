@@ -2,7 +2,7 @@ package prado.com.rews.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +22,9 @@ import prado.com.rews.R;
 import prado.com.rews.helper.LoadSubmissions;
 import prado.com.rews.interfaces.AsyncResponseResult;
 import prado.com.rews.interfaces.ItemTouchHelperAdapter;
+import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.model.Noticia;
+import prado.com.rews.view.ArticleActivity;
 
 /**
  * Created by Prado on 07/09/2016.
@@ -34,6 +36,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private List<Noticia> array;
     private Activity activity;
     private ImageLoader imageLoader;
+    private LoadSubmissions loadSubmissions;
+    private int ACTIVITY_RESULT = 0;
 
     public RecyclerAdapter(List<Noticia> array, Activity activity) {
         this.array = array;
@@ -72,15 +76,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.text.setText(this.array.get(position).getTitle());
-
-        LoadSubmissions loadSubmissions = (LoadSubmissions) new LoadSubmissions(new AsyncResponseResult() {
+        holder.text.setText(array.get(position).getTitle());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void processFinish(final Bitmap bitmap) {
-                holder.imageView.setImageBitmap(bitmap);
+            public void onClick(final View v) {
+                Intent intent = new Intent(activity, ArticleActivity.class);
+                intent.putExtra("URL", array.get(position).getUrl());
+                activity.startActivityForResult(intent, 0);
+            }
+        });
+
+        loadSubmissions = (LoadSubmissions) new LoadSubmissions(new AsyncResponseResult() {
+
+            @Override
+            public void processFinish(final ImageDownloaded imageDownloaded) {
+                if (imageDownloaded.getId().equals(array.get(position).getId())) {
+                    holder.imageView.setImageBitmap(imageDownloaded.getBitmap());
+                }
             }
         }, activity, array.get(position), imageLoader).execute();
+    }
+
+    @Override
+    public void onViewRecycled(final ViewHolder holder) {
+        super.onViewRecycled(holder);
+        loadSubmissions.cancel(true);
     }
 
     @Override

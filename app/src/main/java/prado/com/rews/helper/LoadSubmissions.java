@@ -10,13 +10,14 @@ import com.nostra13.universalimageloader.core.assist.ImageSize;
 
 import prado.com.rews.R;
 import prado.com.rews.interfaces.AsyncResponseResult;
+import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.model.Noticia;
 
 /**
  * Created by Prado on 25/08/2016.
  */
 
-public class LoadSubmissions extends AsyncTask<Void, Void, Bitmap> {
+public class LoadSubmissions extends AsyncTask<Void, Void, ImageDownloaded> {
 
     private AsyncResponseResult delegate = null;
     private Context context;
@@ -31,19 +32,23 @@ public class LoadSubmissions extends AsyncTask<Void, Void, Bitmap> {
     }
 
     @Override
-    protected Bitmap doInBackground(Void... params) {
+    protected ImageDownloaded doInBackground(Void... params) {
 
         ImageSize targetSize = new ImageSize(300, 300);
 
-        Bitmap bmp = imageLoader.loadImageSync(noticia.getImgUrl(), targetSize, null);
+        try {
+            Bitmap bmp = imageLoader.loadImageSync(noticia.getImgur(), targetSize, null);
 
-        if (bmp != null) {
-            return bmp;
+            if (bmp != null) {
+                return new ImageDownloaded(noticia.getId(), bmp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Bitmap errorImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.imagenf);
 
-        return errorImage;
+        return new ImageDownloaded(noticia.getId(), errorImage);
     }
 
     @Override
@@ -51,7 +56,7 @@ public class LoadSubmissions extends AsyncTask<Void, Void, Bitmap> {
     }
 
     @Override
-    protected void onPostExecute(Bitmap bitmap) {
-        delegate.processFinish(bitmap);
+    protected void onPostExecute(ImageDownloaded imageDownloaded) {
+        delegate.processFinish(imageDownloaded);
     }
 }

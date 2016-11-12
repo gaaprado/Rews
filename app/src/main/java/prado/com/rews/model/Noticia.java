@@ -1,8 +1,9 @@
 package prado.com.rews.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
 public class Noticia {
@@ -28,6 +29,9 @@ public class Noticia {
     @SerializedName("img_url")
     @Expose
     private String imgUrl;
+    @SerializedName("id")
+    @Expose
+    private String id;
 
     /**
      * @return The redditLink
@@ -133,4 +137,20 @@ public class Noticia {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    /**
+     * @return The id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     *         The id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

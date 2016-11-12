@@ -1,12 +1,12 @@
 package prado.com.rews.interfaces;
 
-import android.graphics.Bitmap;
+import prado.com.rews.model.ImageDownloaded;
 
 /**
  * Created by Prado on 14/08/2016.
  */
 
 public interface AsyncResponseResult {
-    void processFinish(Bitmap bitmap);
+    void processFinish(ImageDownloaded imageDownloaded);
 
 }

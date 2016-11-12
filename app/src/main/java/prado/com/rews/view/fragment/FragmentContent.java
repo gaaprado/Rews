@@ -41,7 +41,7 @@ public class FragmentContent extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         array = new ArrayList<>();
-
+        LoadNewSubmissions();
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -58,7 +58,6 @@ public class FragmentContent extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LoadNewSubmissions();
     }
 
     private void LoadNewSubmissions() {
