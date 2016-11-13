@@ -25,6 +25,7 @@ import prado.com.rews.interfaces.ItemTouchHelperAdapter;
 import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.view.ArticleActivity;
+import prado.com.rews.view.fragment.FragmentContent;
 
 /**
  * Created by Prado on 07/09/2016.
@@ -83,7 +84,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(final View v) {
                 Intent intent = new Intent(activity, ArticleActivity.class);
                 intent.putExtra("URL", array.get(position).getUrl());
-                activity.startActivityForResult(intent, 0);
+                activity.startActivityForResult(intent, ACTIVITY_RESULT);
             }
         });
 
