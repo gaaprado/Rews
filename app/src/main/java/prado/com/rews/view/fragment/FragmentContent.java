@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,28 +30,35 @@ public class FragmentContent extends Fragment {
     private EndlessRecyclerViewScrollListener recyclerViewScrollListener;
     private List<Noticia> array;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String type;
+    private View view;
 
-    public FragmentContent() {}
+    public FragmentContent(String type) {
+        this.type = type;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (type.equals("News")) {
+            view = inflater.inflate(R.layout.fragment_content, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_content, container, false);
+            recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            array = new ArrayList<>();
+            LoadNewSubmissions();
+            swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        array = new ArrayList<>();
-        LoadNewSubmissions();
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                LoadNewSubmissions();
-            }
-        });
+                @Override
+                public void onRefresh() {
+                    LoadNewSubmissions();
+                }
+            });
+        } else {
+            view = inflater.inflate(R.layout.fragment_profile, container, false);
+        }
 
         return view;
     }
@@ -63,6 +71,8 @@ public class FragmentContent extends Fragment {
     private void LoadNewSubmissions() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
+        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+
         Call<List<Noticia>> call = apiInterface.getNoticias();
         call.enqueue(new Callback<List<Noticia>>() {
 
@@ -72,6 +82,7 @@ public class FragmentContent extends Fragment {
                 if (!response.body().isEmpty()) {
                     array.add(response.body().get(0));
                     array.add(response.body().get(1));
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 final RecyclerAdapter recyclerAdapter = new RecyclerAdapter(array, getActivity());

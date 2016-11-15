@@ -25,7 +25,6 @@ import prado.com.rews.interfaces.ItemTouchHelperAdapter;
 import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.view.ArticleActivity;
-import prado.com.rews.view.fragment.FragmentContent;
 
 /**
  * Created by Prado on 07/09/2016.
@@ -51,7 +50,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         LayoutInflater inflater =
                 (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.fragment_list, parent, false);
+        View view = inflater.inflate(R.layout.fragment_card, parent, false);
 
         view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -78,7 +77,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         holder.text.setText(array.get(position).getTitle());
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        if (position != 0 && position != array.size() - 1) {
+            holder.cardView.setContentPadding(0, 10, 0, 0);
+        } holder.cardView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(final View v) {
