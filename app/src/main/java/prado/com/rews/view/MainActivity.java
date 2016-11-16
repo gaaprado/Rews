@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +22,17 @@ import prado.com.rews.view.fragment.FragmentContent;
 public class MainActivity extends AppCompatActivity {
 
     private int[] tabIcons = {R.drawable.ic_news, R.drawable.ic_person};
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Fresco.initialize(this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().hide();
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);

@@ -1,21 +1,77 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:layout_gravity="center">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_profile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="200dp">
 
-        <android.support.v7.widget.CardView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="match_parent">
 
-            
+            <ImageView
+                android:id="@+id/imageview_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/newspapper"/>
 
-        </android.support.v7.widget.CardView>
+            <com.facebook.drawee.view.SimpleDraweeView android:id="@+id/facePicutre"
+                                                       xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                                                       android:layout_width="100dp"
+                                                       android:layout_height="90dp"
+                                                       android:layout_centerHorizontal="true"
+                                                       android:layout_centerVertical="true"
+                                                       android:background="@drawable/ic_reddit_guest"
+                                                       fresco:roundAsCircle="true"
+                                                       fresco:roundingBorderColor="#FFFFFF"
+                                                       fresco:roundingBorderWidth="5dp"/>
 
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/linear_layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cardView_profile"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_upvotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="UpVotes"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/button_downvotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="DownVotes"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/button_favorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="Favorites"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear_layout_buttons"
+        android:layout_marginTop="10dp"/>
+
+</RelativeLayout>

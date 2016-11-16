@@ -2,12 +2,14 @@ package prado.com.rews.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -39,15 +41,14 @@ public class FragmentContent extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        linearLayoutManager = new LinearLayoutManager(getContext());
         if (type.equals("News")) {
             view = inflater.inflate(R.layout.fragment_content, container, false);
-
             recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
             array = new ArrayList<>();
             LoadNewSubmissions();
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+            recyclerView.setLayoutManager(linearLayoutManager);
 
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -58,6 +59,14 @@ public class FragmentContent extends Fragment {
             });
         } else {
             view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+            Button upvoteButton = (Button) view.findViewById(R.id.button_upvotes);
+            Button favoriteButton = (Button) view.findViewById(R.id.button_favorites);
+            Button downvoteButton = (Button) view.findViewById(R.id.button_downvotes);
+
+            upvoteButton.setOnClickListener(new ClickListener("upvote"));
+            downvoteButton.setOnClickListener(new ClickListener("downvote"));
+            favoriteButton.setOnClickListener(new ClickListener("favorite"));
         }
 
         return view;
@@ -106,5 +115,22 @@ public class FragmentContent extends Fragment {
                 throwable.printStackTrace();
             }
         });
+    }
+
+    private class ClickListener implements View.OnClickListener {
+
+        private String type;
+
+        ClickListener(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public void onClick(final View view) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.frame_layout_buttons, new FragmentHistory(type));
+            ft.addToBackStack(null);
+            ft.commit();
+        }
     }
 }
