@@ -1,5 +1,6 @@
 package prado.com.rews.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ import prado.com.rews.helper.EndlessRecyclerViewScrollListener;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.rest.ApiClient;
 import prado.com.rews.rest.ApiInterface;
+import prado.com.rews.view.ArticleActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,13 +64,32 @@ public class FragmentContent extends Fragment {
         } else {
             view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-            Button upvoteButton = (Button) view.findViewById(R.id.button_upvotes);
-            Button favoriteButton = (Button) view.findViewById(R.id.button_favorites);
-            Button downvoteButton = (Button) view.findViewById(R.id.button_downvotes);
+            //FIXME essa porcaria precisa receber o status do login no site pra tal coisa seila.
+            boolean isLogged = true;
 
-            upvoteButton.setOnClickListener(new ClickListener("upvote"));
-            downvoteButton.setOnClickListener(new ClickListener("downvote"));
-            favoriteButton.setOnClickListener(new ClickListener("favorite"));
+            if (isLogged) {
+                Button upvoteButton = (Button) view.findViewById(R.id.button_upvotes);
+                Button favoriteButton = (Button) view.findViewById(R.id.button_favorites);
+                Button downvoteButton = (Button) view.findViewById(R.id.button_downvotes);
+                FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.frame_layout_buttons);
+                frameLayout.setVisibility(View.VISIBLE);
+
+                upvoteButton.setOnClickListener(new ClickListener("upvote"));
+                downvoteButton.setOnClickListener(new ClickListener("downvote"));
+                favoriteButton.setOnClickListener(new ClickListener("favorite"));
+            } else {
+                RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
+                relativeLayout.setVisibility(View.VISIBLE);
+                Button logIn = (Button) view.findViewById(R.id.button_login);
+                logIn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(final View v) {
+                        Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                        startActivityForResult(intent, 2);
+                    }
+                });
+            }
         }
 
         return view;
