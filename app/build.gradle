@@ -41,5 +41,5 @@ dependencies {
     compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.0.0-beta3'
     compile 'com.facebook.fresco:fresco:0.12.0'
     compile 'javax.annotation:javax.annotation-api:1.2'
-
+    compile 'com.github.stkent:bugshaker-android:1.1.0'
 }

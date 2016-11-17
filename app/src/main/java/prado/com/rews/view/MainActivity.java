@@ -12,10 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.github.stkent.bugshaker.BugShaker;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import prado.com.rews.BuildConfig;
 import prado.com.rews.R;
 import prado.com.rews.view.fragment.FragmentContent;
 
@@ -39,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons(tabLayout);
+
+        BugShaker.get(getApplication()).setEmailAddresses("gaa.prado@hotmail.com")   // required
+                .setEmailSubjectLine("Bug Report") // optional
+                .setLoggingEnabled(BuildConfig.DEBUG)       // optional
+                .setIgnoreFlagSecure(true)     // optional
+                .start();                                   // required
     }
 
     private void setupViewPager(ViewPager viewPager) {

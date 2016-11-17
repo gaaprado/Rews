@@ -3,7 +3,6 @@ package prado.com.rews.view.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -19,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import prado.com.rews.R;
+import prado.com.rews.adapter.HistoryAdapter;
 import prado.com.rews.adapter.RecyclerAdapter;
 import prado.com.rews.helper.EndlessRecyclerViewScrollListener;
 import prado.com.rews.model.Noticia;
@@ -71,12 +70,24 @@ public class FragmentContent extends Fragment {
                 Button upvoteButton = (Button) view.findViewById(R.id.button_upvotes);
                 Button favoriteButton = (Button) view.findViewById(R.id.button_favorites);
                 Button downvoteButton = (Button) view.findViewById(R.id.button_downvotes);
-                FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.frame_layout_buttons);
-                frameLayout.setVisibility(View.VISIBLE);
 
                 upvoteButton.setOnClickListener(new ClickListener("upvote"));
+                upvoteButton.setVisibility(View.VISIBLE);
                 downvoteButton.setOnClickListener(new ClickListener("downvote"));
+                downvoteButton.setVisibility(View.VISIBLE);
                 favoriteButton.setOnClickListener(new ClickListener("favorite"));
+                favoriteButton.setVisibility(View.VISIBLE);
+
+                List<String> bla = new ArrayList<>();
+                bla.add("oi");
+                bla.add("tchau");
+                bla.add("teste");
+
+                RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
+                recyclerView.setHasFixedSize(true);
+                HistoryAdapter historyAdapter = new HistoryAdapter(bla);
+                recyclerView.setAdapter(historyAdapter);
+                recyclerView.setLayoutManager(linearLayoutManager);
             } else {
                 RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
                 relativeLayout.setVisibility(View.VISIBLE);
@@ -150,10 +161,10 @@ public class FragmentContent extends Fragment {
 
         @Override
         public void onClick(final View view) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.frame_layout_buttons, new FragmentHistory(type));
-            ft.addToBackStack(null);
-            ft.commit();
+            // FragmentTransaction ft = getFragmentManager().beginTransaction();
+            //   ft.replace(R.id.frame_layout_buttons, new FragmentHistory(type));
+            //     ft.addToBackStack(null);
+            //       ft.commit();
         }
     }
 }
