@@ -33,6 +33,36 @@ public class Noticia {
     @Expose
     private String id;
 
+    private boolean upvoted;
+    private boolean downvoted;
+    private boolean favorited;
+
+    public boolean isUpvoted() {
+        return upvoted;
+    }
+
+    public void setUpvoted(final boolean upvoted) {
+        this.upvoted = upvoted;
+    }
+
+    public boolean isDownvoted() {
+        return downvoted;
+    }
+
+    public void setDownvoted(final boolean downvoted) {
+        this.downvoted = downvoted;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(final boolean favorited) {
+        this.favorited = favorited;
+    }
+
+    public Noticia(){}
+
     /**
      * @return The redditLink
      */
@@ -152,5 +182,4 @@ public class Noticia {
     public void setId(String id) {
         this.id = id;
     }
-
 }

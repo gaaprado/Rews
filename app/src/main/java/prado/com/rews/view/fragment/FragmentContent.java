@@ -63,29 +63,53 @@ public class FragmentContent extends Fragment {
         } else {
             view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-            //FIXME essa porcaria precisa receber o status do login no site pra tal coisa seila.
             boolean isLogged = true;
 
             if (isLogged) {
-                Button upvoteButton = (Button) view.findViewById(R.id.button_upvotes);
-                Button favoriteButton = (Button) view.findViewById(R.id.button_favorites);
-                Button downvoteButton = (Button) view.findViewById(R.id.button_downvotes);
+                List<Noticia> noticiaList = new ArrayList<>();
+                Noticia noticia = new Noticia() {{
+                    setTitle("Titulo da noticia 1");
+                    setFavorited(true);
+                    setUrl("www.tibia.com");
+                }};
+                Noticia noticia2 = new Noticia() {{
+                    setTitle("Titulo da noticia 2");
+                    setFavorited(true);
+                    setUrl("www.xvideos.com");
+                }};
+                Noticia noticia3 = new Noticia() {{
+                    setTitle("Titulo da noticia 3");
+                    setFavorited(true);
+                    setUrl("www.google.com");
+                }};
+                Noticia noticia4 = new Noticia() {{
+                    setTitle("Titulo da noticia 4");
+                    setFavorited(true);
+                }};
+                Noticia noticia5 = new Noticia() {{
+                    setTitle("Titulo da noticia 5");
+                    setFavorited(true);
+                }};
+                Noticia noticia6 = new Noticia() {{
+                    setTitle("Titulo da noticia 6");
+                    setFavorited(true);
+                }};
+                Noticia noticia7 = new Noticia() {{
+                    setTitle("Titulo da noticia 7");
+                    setFavorited(true);
+                }};
 
-                upvoteButton.setOnClickListener(new ClickListener("upvote"));
-                upvoteButton.setVisibility(View.VISIBLE);
-                downvoteButton.setOnClickListener(new ClickListener("downvote"));
-                downvoteButton.setVisibility(View.VISIBLE);
-                favoriteButton.setOnClickListener(new ClickListener("favorite"));
-                favoriteButton.setVisibility(View.VISIBLE);
-
-                List<String> bla = new ArrayList<>();
-                bla.add("oi");
-                bla.add("tchau");
-                bla.add("teste");
+                noticiaList.add(noticia);
+                noticiaList.add(noticia2);
+                noticiaList.add(noticia3);
+                noticiaList.add(noticia4);
+                noticiaList.add(noticia5);
+                noticiaList.add(noticia6);
+                noticiaList.add(noticia7);
 
                 RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
                 recyclerView.setHasFixedSize(true);
-                HistoryAdapter historyAdapter = new HistoryAdapter(bla);
+                HistoryAdapter historyAdapter = new HistoryAdapter(noticiaList, getContext());
                 recyclerView.setAdapter(historyAdapter);
                 recyclerView.setLayoutManager(linearLayoutManager);
             } else {
