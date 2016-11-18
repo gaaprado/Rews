@@ -8,6 +8,20 @@
                                                  app:layout_behavior="@string/appbar_scrolling_view_behavior"
                                                  tools:context="prado.com.rews.view.MainActivity">
 
+    <RelativeLayout
+        android:id="@+id/relative_layout_connection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connection Failed"
+            android:textSize="16sp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
     <FrameLayout
         android:id="@+id/frameMain"
         android:layout_width="match_parent"

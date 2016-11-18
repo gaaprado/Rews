@@ -57,12 +57,10 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         getSupportActionBar().setTitle("WorldNews");
                         toolbar.findViewById(R.id.menu_sort).setVisibility(View.VISIBLE);
-                        //findViewById(R.id.button_signout).setVisibility(View.GONE);
                         break;
                     case 1:
                         getSupportActionBar().setTitle("Profile");
                         toolbar.findViewById(R.id.menu_sort).setVisibility(View.GONE);
-                        //findViewById(R.id.button_signout).setVisibility(View.VISIBLE);
                         break;
                 }
             }

@@ -1,6 +1,5 @@
 package prado.com.rews.view.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import prado.com.rews.helper.EndlessRecyclerViewScrollListener;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.rest.ApiClient;
 import prado.com.rews.rest.ApiInterface;
-import prado.com.rews.view.ArticleActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,63 +63,71 @@ public class FragmentContent extends Fragment {
 
             boolean isLogged = true;
 
-            if (isLogged) {
-                List<Noticia> noticiaList = new ArrayList<>();
-                Noticia noticia = new Noticia() {{
-                    setTitle("Titulo da noticia 1");
-                    setFavorited(true);
-                    setUrl("www.tibia.com");
-                }};
-                Noticia noticia2 = new Noticia() {{
-                    setTitle("Titulo da noticia 2");
-                    setFavorited(true);
-                    setUrl("www.xvideos.com");
-                }};
-                Noticia noticia3 = new Noticia() {{
-                    setTitle("Titulo da noticia 3");
-                    setFavorited(true);
-                    setUrl("www.google.com");
-                }};
-                Noticia noticia4 = new Noticia() {{
-                    setTitle("Titulo da noticia 4");
-                    setFavorited(true);
-                }};
-                Noticia noticia5 = new Noticia() {{
-                    setTitle("Titulo da noticia 5");
-                    setFavorited(true);
-                }};
-                Noticia noticia6 = new Noticia() {{
-                    setTitle("Titulo da noticia 6");
-                    setFavorited(true);
-                }};
-                Noticia noticia7 = new Noticia() {{
-                    setTitle("Titulo da noticia 7");
-                    setFavorited(true);
-                }};
+            List<Noticia> noticiaList = new ArrayList<>();
+            Noticia noticia = new Noticia() {{
+                setTitle("Titulo da noticia 1");
+                setFavorited(true);
+                setUrl("www.tibia.com");
+            }};
+            Noticia noticia2 = new Noticia() {{
+                setTitle("Titulo da noticia 2");
+                setFavorited(true);
+                setUrl("www.xvideos.com");
+            }};
+            Noticia noticia3 = new Noticia() {{
+                setTitle("Titulo da noticia 3");
+                setFavorited(true);
+                setUrl("www.google.com");
+            }};
+            Noticia noticia4 = new Noticia() {{
+                setTitle("Titulo da noticia 4");
+                setFavorited(true);
+            }};
+            Noticia noticia5 = new Noticia() {{
+                setTitle("Titulo da noticia 5");
+                setFavorited(true);
+            }};
+            Noticia noticia6 = new Noticia() {{
+                setTitle("Titulo da noticia 6");
+                setFavorited(true);
+            }};
+            Noticia noticia7 = new Noticia() {{
+                setTitle("Titulo da noticia 7");
+                setFavorited(true);
+            }};
 
-                noticiaList.add(noticia);
-                noticiaList.add(noticia2);
-                noticiaList.add(noticia3);
-                noticiaList.add(noticia4);
-                noticiaList.add(noticia5);
-                noticiaList.add(noticia6);
-                noticiaList.add(noticia7);
+            noticiaList.add(noticia);
+            noticiaList.add(noticia2);
+            noticiaList.add(noticia3);
+            noticiaList.add(noticia4);
+            noticiaList.add(noticia5);
+            noticiaList.add(noticia6);
+            noticiaList.add(noticia7);
 
-                RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
-                recyclerView.setHasFixedSize(true);
-                HistoryAdapter historyAdapter = new HistoryAdapter(noticiaList, getContext());
-                recyclerView.setAdapter(historyAdapter);
-                recyclerView.setLayoutManager(linearLayoutManager);
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
+            recyclerView.setHasFixedSize(true);
+            HistoryAdapter historyAdapter = new HistoryAdapter(noticiaList, getContext());
+            recyclerView.setAdapter(historyAdapter);
+            recyclerView.setLayoutManager(linearLayoutManager);
+
+            if (!isLogged) {
+                view.findViewById(R.id.relative_layout_recycler).setVisibility(View.VISIBLE);
             } else {
-                RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
-                relativeLayout.setVisibility(View.VISIBLE);
+                //view.findViewById(R.id.cardView_profile).setVisibility(View.GONE);
+                view.findViewById(R.id.relative_layout_recycler).setVisibility(View.INVISIBLE);
+                final LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linear_layout_login);
+                linearLayout.setVisibility(View.VISIBLE);
                 Button logIn = (Button) view.findViewById(R.id.button_login);
                 logIn.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(final View v) {
+                        //      view.findViewById(R.id.cardView_profile).setVisibility(View.VISIBLE);
+                        view.findViewById(R.id.relative_layout_recycler).setVisibility(View.VISIBLE);
+                        linearLayout.setVisibility(View.GONE);
+                        /*
                         Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                        startActivityForResult(intent, 2);
+                        startActivityForResult(intent, 2);*/
                     }
                 });
             }
@@ -170,7 +176,9 @@ public class FragmentContent extends Fragment {
 
             @Override
             public void onFailure(final Call<List<Noticia>> call, final Throwable throwable) {
-                throwable.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+                getActivity().findViewById(R.id.relative_layout_connection).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.frameMain).setVisibility(View.GONE);
             }
         });
     }

@@ -7,4 +7,11 @@
         android:icon="@drawable/ic_sort"
         android:title="Sort"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_signout"
+        android:title="LogOut"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
 </menu>
