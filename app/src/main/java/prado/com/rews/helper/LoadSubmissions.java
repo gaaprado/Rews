@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 
 import prado.com.rews.R;
-import prado.com.rews.interfaces.AsyncResponseResult;
 import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.model.Noticia;
 
@@ -19,16 +20,19 @@ import prado.com.rews.model.Noticia;
 
 public class LoadSubmissions extends AsyncTask<Void, Void, ImageDownloaded> {
 
-    private AsyncResponseResult delegate = null;
+    private LoadSubmissionsResult delegate = null;
     private Context context;
     private Noticia noticia;
     private ImageLoader imageLoader;
+    private ProgressBar progressBar;
 
-    public LoadSubmissions(AsyncResponseResult delegate, Context context, Noticia noticia, ImageLoader imageLoader) {
+    public LoadSubmissions(LoadSubmissionsResult delegate, Context context, Noticia noticia, ImageLoader imageLoader,
+                           ProgressBar progressBar) {
         this.delegate = delegate;
         this.context = context;
         this.noticia = noticia;
         this.imageLoader = imageLoader;
+        this.progressBar = progressBar;
     }
 
     @Override
@@ -57,6 +61,7 @@ public class LoadSubmissions extends AsyncTask<Void, Void, ImageDownloaded> {
 
     @Override
     protected void onPostExecute(ImageDownloaded imageDownloaded) {
-        delegate.processFinish(imageDownloaded);
+        progressBar.setVisibility(View.GONE);
+        delegate.onSuccess(imageDownloaded);
     }
 }

@@ -42,4 +42,5 @@ dependencies {
     compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
     compile 'com.github.stkent:bugshaker-android:1.1.0'
+    compile 'net.dean.jraw:JRAW:0.9.0'
 }

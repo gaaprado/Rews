@@ -42,8 +42,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
-                android:clickable="true"
                 android:layout_marginStart="10dp"
+                android:clickable="true"
                 app:srcCompat="@drawable/ic_share"/>
 
             <ImageView
@@ -51,9 +51,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
-                android:layout_marginStart="10dp"
                 app:srcCompat="@drawable/ic_arrowup"/>
 
             <ImageView
@@ -61,9 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="50dp"
                 android:clickable="true"
-                android:layout_marginStart="10dp"
                 app:srcCompat="@drawable/ic_arrowdown"/>
 
             <TextView
@@ -85,6 +85,12 @@
                 android:textColor="#FFF"
                 android:textSize="16sp"
                 tools:ignore="RelativeOverlap"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
 
         </RelativeLayout>
 
