@@ -5,13 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-
-import net.dean.jraw.RedditClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,7 @@ import java.util.List;
 import prado.com.rews.R;
 import prado.com.rews.adapter.RecyclerAdapter;
 import prado.com.rews.helper.EndlessRecyclerViewScrollListener;
-import prado.com.rews.helper.TransferData;
+import prado.com.rews.helper.FragmentListener;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.rest.ApiClient;
 import prado.com.rews.rest.ApiInterface;
@@ -27,9 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentContent extends Fragment implements TransferData {
+public class FragmentContent extends Fragment implements FragmentListener {
 
-    private RedditClient redditClient;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private EndlessRecyclerViewScrollListener recyclerViewScrollListener;
@@ -42,8 +38,8 @@ public class FragmentContent extends Fragment implements TransferData {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        linearLayoutManager = new LinearLayoutManager(getContext());
         view = inflater.inflate(R.layout.fragment_content, container, false);
+        linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LoadNewSubmissions();
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
@@ -103,20 +99,10 @@ public class FragmentContent extends Fragment implements TransferData {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (redditClient != null) {
-            Log.d("RedditClient", "Meu nome é: " + redditClient.me());
-        }
+    public void onPauseFragment() {
     }
 
     @Override
-    public RedditClient getRedditClient() {
-        return redditClient;
-    }
-
-    @Override
-    public void setRedditClient(final RedditClient redditClient) {
-        this.redditClient = redditClient;
+    public void onResumeFragment() {
     }
 }

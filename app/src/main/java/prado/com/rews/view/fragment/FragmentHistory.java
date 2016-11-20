@@ -2,8 +2,6 @@ package prado.com.rews.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +27,11 @@ public class FragmentHistory extends Fragment {
 
         RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_history);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
-        recyclerView.setHasFixedSize(true);
+        //RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
+        //recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        //recyclerView.setLayoutManager(layoutManager);
 
         //RelativeLayout downVoteLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_downvotes);
         //RelativeLayout favoriteLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_favorites);

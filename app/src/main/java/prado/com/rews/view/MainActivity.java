@@ -23,6 +23,7 @@ import java.util.List;
 
 import prado.com.rews.BuildConfig;
 import prado.com.rews.R;
+import prado.com.rews.helper.FragmentListener;
 import prado.com.rews.helper.TransferData;
 import prado.com.rews.view.fragment.FragmentAccount;
 import prado.com.rews.view.fragment.FragmentContent;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements TransferData {
     private int[] tabIcons = {R.drawable.ic_news, R.drawable.ic_person};
     private RedditClient redditClient;
     private Toolbar toolbar;
+    private String subReddit;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements TransferData {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("WorldNews");
+        setSubReddit("WorldNews");
+        getSupportActionBar().setTitle(getSubReddit());
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);
@@ -55,12 +59,16 @@ public class MainActivity extends AppCompatActivity implements TransferData {
             public void onTabSelected(final TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        toolbar.setTitle("WorldNews");
+                        toolbar.setTitle(getSubReddit());
                         toolbar.findViewById(R.id.menu_sort).setVisibility(View.VISIBLE);
+                        ((FragmentListener) adapter.getItem(0)).onResumeFragment();
+                        ((FragmentListener) adapter.getItem(1)).onPauseFragment();
                         break;
                     case 1:
                         toolbar.setTitle("Profile");
                         toolbar.findViewById(R.id.menu_sort).setVisibility(View.GONE);
+                        ((FragmentListener) adapter.getItem(1)).onResumeFragment();
+                        ((FragmentListener) adapter.getItem(0)).onPauseFragment();
                         break;
                 }
             }
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements TransferData {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new FragmentContent(), null);
         adapter.addFragment(new FragmentAccount(), null);
         viewPager.setAdapter(adapter);
@@ -122,6 +130,12 @@ public class MainActivity extends AppCompatActivity implements TransferData {
 
         DialogFragment newFragment = FragmentDialog.newInstance();
         newFragment.show(ft, "dialog");
+    }
+
+    public String getSubReddit() {return subReddit;}
+
+    public void setSubReddit(String subReddit) {
+        this.subReddit = subReddit;
     }
 
     @Override

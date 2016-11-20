@@ -117,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/text_view_favorites"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:background="#BDBDBD"/>
 
         <android.support.v7.widget.RecyclerView
@@ -126,7 +126,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/view_divider"
             android:scrollbars="vertical"/>
-
     </RelativeLayout>
 
 </RelativeLayout>
