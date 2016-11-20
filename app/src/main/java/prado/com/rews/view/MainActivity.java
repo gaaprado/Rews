@@ -2,7 +2,6 @@ package prado.com.rews.view;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,20 +16,23 @@ import android.view.View;
 
 import com.github.stkent.bugshaker.BugShaker;
 
+import net.dean.jraw.RedditClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import prado.com.rews.BuildConfig;
 import prado.com.rews.R;
-import prado.com.rews.model.Noticia;
+import prado.com.rews.helper.TransferData;
+import prado.com.rews.view.fragment.FragmentAccount;
 import prado.com.rews.view.fragment.FragmentContent;
 import prado.com.rews.view.fragment.FragmentDialog;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TransferData {
 
     private int[] tabIcons = {R.drawable.ic_news, R.drawable.ic_person};
-    public Toolbar toolbar;
-    private List<Noticia> favoriteList;
+    private RedditClient redditClient;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("WorldNews");
+        toolbar.setTitle("WorldNews");
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);
-
-        favoriteList = new ArrayList<>();
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(final TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        getSupportActionBar().setTitle("WorldNews");
+                        toolbar.setTitle("WorldNews");
                         toolbar.findViewById(R.id.menu_sort).setVisibility(View.VISIBLE);
                         break;
                     case 1:
-                        getSupportActionBar().setTitle("Profile");
+                        toolbar.setTitle("Profile");
                         toolbar.findViewById(R.id.menu_sort).setVisibility(View.GONE);
                         break;
                 }
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         BugShaker.get(getApplication())
-                .setEmailAddresses("gaa.prado@hotmail.com")   // required
+                .setEmailAddresses("gaa.prado@hotmail.com")
                 .setEmailSubjectLine("Bug Report")
                 .setLoggingEnabled(BuildConfig.DEBUG)
                 .setIgnoreFlagSecure(true)
@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FragmentContent("News"), null);
-        adapter.addFragment(new FragmentContent("Profile"), null);
+        adapter.addFragment(new FragmentContent(), null);
+        adapter.addFragment(new FragmentAccount(), null);
         viewPager.setAdapter(adapter);
     }
 
@@ -97,20 +97,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override
@@ -133,6 +122,16 @@ public class MainActivity extends AppCompatActivity {
 
         DialogFragment newFragment = FragmentDialog.newInstance();
         newFragment.show(ft, "dialog");
+    }
+
+    @Override
+    public RedditClient getRedditClient() {
+        return redditClient;
+    }
+
+    @Override
+    public void setRedditClient(final RedditClient redditClient) {
+        this.redditClient = redditClient;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
