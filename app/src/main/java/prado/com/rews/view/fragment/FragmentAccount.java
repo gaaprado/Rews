@@ -1,15 +1,15 @@
 package prado.com.rews.view.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +18,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import net.dean.jraw.RedditClient;
+import net.dean.jraw.models.Contribution;
+import net.dean.jraw.models.Listing;
 
 import prado.com.rews.R;
+import prado.com.rews.adapter.HistoryAdapter;
 import prado.com.rews.helper.FragmentListener;
+import prado.com.rews.helper.LoadSubmissionsResult;
 import prado.com.rews.helper.RedditAccount;
 import prado.com.rews.helper.RedditAccountResult;
+import prado.com.rews.helper.SendSubmission;
+import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.view.MainActivity;
 
 /**
@@ -34,8 +38,6 @@ import prado.com.rews.view.MainActivity;
 
 public class FragmentAccount extends Fragment implements FragmentListener {
 
-    private RedditClient redditClient;
-    private SharedPreferences sharedPreferences;
     private View view;
 
     public FragmentAccount() {}
@@ -46,14 +48,6 @@ public class FragmentAccount extends Fragment implements FragmentListener {
                              final Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String jsonClient = sharedPreferences.getString("redditClient", "invalid");
-
-        if (!jsonClient.equals("invalid")) {
-            System.out.println("pegou salvo");
-            redditClient = new Gson().fromJson(jsonClient, RedditClient.class);
-        }
 
         TextView createAccount = (TextView) view.findViewById(R.id.text_view_account);
         createAccount.setOnClickListener(new View.OnClickListener() {
@@ -80,16 +74,9 @@ public class FragmentAccount extends Fragment implements FragmentListener {
             }
         });
 
-        return view;
-    }
+        onResumeFragment();
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String jsonClient = new Gson().toJson(redditClient);
-        editor.putString("redditClient", jsonClient);
-        editor.apply();
+        return view;
     }
 
     @Override
@@ -99,12 +86,16 @@ public class FragmentAccount extends Fragment implements FragmentListener {
 
     @Override
     public void onResumeFragment() {
-        if (redditClient == null) {
-            view.findViewById(R.id.linear_layout_login).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.relative_layout_recycler).setVisibility(View.GONE);
-        } else {
-            view.findViewById(R.id.linear_layout_login).setVisibility(View.GONE);
-            view.findViewById(R.id.relative_layout_recycler).setVisibility(View.VISIBLE);
+        try {
+            if (((MainActivity) getActivity()).getRedditClient() == null) {
+                view.findViewById(R.id.linear_layout_login).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.relative_layout_recycler).setVisibility(View.GONE);
+            } else {
+                view.findViewById(R.id.linear_layout_login).setVisibility(View.GONE);
+                view.findViewById(R.id.relative_layout_recycler).setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -128,6 +119,32 @@ public class FragmentAccount extends Fragment implements FragmentListener {
                             (FloatingActionButton) getActivity().findViewById(R.id.floating_button_loggout);
                     loggoutButton.setOnClickListener(new onLoggoutListener());
                     loggoutButton.setVisibility(View.VISIBLE);
+
+                    final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
+                    recyclerView.setHasFixedSize(true);
+
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    recyclerView.setLayoutManager(layoutManager);
+
+                    try {
+                        if (redditClient != null) {
+                            SendSubmission sendSubmission =
+                                    new SendSubmission(redditClient, new LoadSubmissionsResult() {
+
+                                        @Override
+                                        public void onSuccess(final ImageDownloaded imageDownloaded) {
+                                        }
+
+                                        @Override
+                                        public void onSuccess(final Listing<Contribution> listing) {
+                                            recyclerView.setAdapter(new HistoryAdapter(listing, getActivity()));
+                                        }
+                                    }, "saved");
+                            sendSubmission.execute();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override

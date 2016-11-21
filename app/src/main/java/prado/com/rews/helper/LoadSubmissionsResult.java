@@ -1,5 +1,8 @@
 package prado.com.rews.helper;
 
+import net.dean.jraw.models.Contribution;
+import net.dean.jraw.models.Listing;
+
 import prado.com.rews.model.ImageDownloaded;
 
 /**
@@ -8,4 +11,6 @@ import prado.com.rews.model.ImageDownloaded;
 public interface LoadSubmissionsResult {
 
     void onSuccess(ImageDownloaded imageDownloaded);
+
+    void onSuccess(Listing<Contribution> listing);
 }

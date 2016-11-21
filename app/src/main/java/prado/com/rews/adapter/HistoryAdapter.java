@@ -2,7 +2,6 @@ package prado.com.rews.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -14,11 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
+import net.dean.jraw.models.Contribution;
+import net.dean.jraw.models.Listing;
 
 import prado.com.rews.R;
-import prado.com.rews.model.Noticia;
-import prado.com.rews.view.ArticleActivity;
 
 /**
  * Created by Gabriel on 16/11/2016.
@@ -26,10 +24,10 @@ import prado.com.rews.view.ArticleActivity;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    private List<Noticia> noticiaList;
+    private Listing<Contribution> noticiaList;
     private Context context;
 
-    public HistoryAdapter(List<Noticia> noticiaList, Context context) {
+    public HistoryAdapter(Listing<Contribution> noticiaList, Context context) {
         this.noticiaList = noticiaList;
         this.context = context;
     }
@@ -49,17 +47,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.title.setText(noticiaList.get(position).getTitle());
+        holder.title.setText(noticiaList.get(position).getFullName());
 
+        /*
         holder.title.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(final View v) {
                 Intent intent = new Intent(context, ArticleActivity.class);
-                intent.putExtra("URL", noticiaList.get(position).getUrl());
+                intent.putExtra("URL", noticiaList.get(position);
                 context.startActivity(intent);
             }
-        });
+        });*/
 
         holder.image.setOnClickListener(new View.OnClickListener() {
 

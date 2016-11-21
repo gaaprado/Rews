@@ -17,14 +17,20 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import net.dean.jraw.RedditClient;
+import net.dean.jraw.models.Contribution;
+import net.dean.jraw.models.Listing;
+
 import java.util.List;
 
 import prado.com.rews.R;
 import prado.com.rews.helper.LoadSubmissions;
 import prado.com.rews.helper.LoadSubmissionsResult;
+import prado.com.rews.helper.SendSubmission;
 import prado.com.rews.model.ImageDownloaded;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.view.ArticleActivity;
+import prado.com.rews.view.MainActivity;
 
 /**
  * Created by Prado on 07/09/2016.
@@ -110,8 +116,49 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         holder.imageView.setImageBitmap(imageDownloaded.getBitmap());
                     }
                 }
+
+                @Override
+                public void onSuccess(final Listing<Contribution> listing) {
+
+                }
             }, activity, array.get(position), imageLoader, holder.progressBar).execute();
         }
+
+        holder.like.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                final RedditClient redditClient = ((MainActivity) activity).getRedditClient();
+                if (redditClient != null) {
+                    SendSubmission sendSubmission = new SendSubmission(redditClient, array.get(position), "1");
+                    sendSubmission.execute();
+                }
+            }
+        });
+
+        holder.dislike.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                RedditClient redditClient = ((MainActivity) activity).getRedditClient();
+                if (redditClient != null) {
+                    SendSubmission sendSubmission = new SendSubmission(redditClient, array.get(position), "-1");
+                    sendSubmission.execute();
+                }
+            }
+        });
+
+        holder.favoriteImage.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                RedditClient redditClient = ((MainActivity) activity).getRedditClient();
+                if (redditClient != null) {
+                    SendSubmission sendSubmission = new SendSubmission(redditClient, array.get(position), "0");
+                    sendSubmission.execute();
+                }
+            }
+        });
     }
 
     @Override

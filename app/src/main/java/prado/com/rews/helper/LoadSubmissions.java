@@ -35,6 +35,11 @@ public class LoadSubmissions extends AsyncTask<Void, Void, ImageDownloaded> {
         this.progressBar = progressBar;
     }
 
+    public LoadSubmissions(LoadSubmissionsResult delegate, Context context) {
+        this.delegate = delegate;
+        this.context = context;
+    }
+
     @Override
     protected ImageDownloaded doInBackground(Void... params) {
 
@@ -53,10 +58,6 @@ public class LoadSubmissions extends AsyncTask<Void, Void, ImageDownloaded> {
         Bitmap errorImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.imagenf);
 
         return new ImageDownloaded(noticia.getId(), errorImage);
-    }
-
-    @Override
-    protected void onPreExecute() {
     }
 
     @Override
