@@ -1,22 +1,23 @@
 package prado.com.rews.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.dean.jraw.models.Contribution;
 import net.dean.jraw.models.Listing;
 
+import java.util.List;
+
 import prado.com.rews.R;
+import prado.com.rews.model.Noticia;
+import prado.com.rews.view.ArticleActivity;
+import prado.com.rews.view.MainActivity;
 
 /**
  * Created by Gabriel on 16/11/2016.
@@ -24,11 +25,11 @@ import prado.com.rews.R;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    private Listing<Contribution> noticiaList;
+    private List<Contribution> contributionList;
     private Context context;
 
-    public HistoryAdapter(Listing<Contribution> noticiaList, Context context) {
-        this.noticiaList = noticiaList;
+    public HistoryAdapter(Listing<Contribution> contributionList, Context context) {
+        this.contributionList = contributionList;
         this.context = context;
     }
 
@@ -44,53 +45,34 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.title.setText(noticiaList.get(position).getFullName());
+        if (contributionList != null) {
+            try {
+                List<Noticia> noticiaList = ((MainActivity) context).getNoticiaList();
+                for (final Noticia noticia : noticiaList) {
+                    if (noticia.getId().equals(contributionList.get(position).getId())) {
+                        holder.title.setText(noticia.getTitle());
+                        holder.title.setOnClickListener(new View.OnClickListener() {
 
-        /*
-        holder.title.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(final View v) {
-                Intent intent = new Intent(context, ArticleActivity.class);
-                intent.putExtra("URL", noticiaList.get(position);
-                context.startActivity(intent);
-            }
-        });*/
-
-        holder.image.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(final View v) {
-
-                //FIXME Mudar para inglês o texto do alertdialog.
-                AlertDialog alerta;
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Desfavoritar:");
-                builder.setMessage("Você tem certeza que deseja desfavoritar essa notícia?");
-                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface arg0, int arg1) {
+                            @Override
+                            public void onClick(final View v) {
+                                Intent intent = new Intent(context, ArticleActivity.class);
+                                intent.putExtra("URL", noticia.getUrl());
+                                context.startActivity(intent);
+                            }
+                        });
                     }
-                });
-                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        //TODO no onclick sucesso remove o item do array
-                        Toast.makeText(context, "Desfavoritado", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                alerta = builder.create();
-                alerta.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return noticiaList.size();
+        return contributionList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -105,3 +87,4 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
     }
 }
+sc

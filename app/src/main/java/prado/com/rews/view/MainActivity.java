@@ -12,19 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.github.stkent.bugshaker.BugShaker;
 
 import net.dean.jraw.RedditClient;
+import net.dean.jraw.models.Contribution;
+import net.dean.jraw.models.Listing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import prado.com.rews.BuildConfig;
 import prado.com.rews.R;
 import prado.com.rews.helper.FragmentListener;
 import prado.com.rews.helper.TransferData;
+import prado.com.rews.model.Noticia;
 import prado.com.rews.view.fragment.FragmentAccount;
 import prado.com.rews.view.fragment.FragmentContent;
 import prado.com.rews.view.fragment.FragmentDialog;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements TransferData {
     private Toolbar toolbar;
     private String subReddit;
     private ViewPagerAdapter adapter;
+    private List<Noticia> list;
+    private Map<String, Listing<Contribution>> listingMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +65,11 @@ public class MainActivity extends AppCompatActivity implements TransferData {
                 switch (tab.getPosition()) {
                     case 0:
                         toolbar.setTitle(getSubReddit());
-                        toolbar.findViewById(R.id.menu_sort).setVisibility(View.VISIBLE);
                         ((FragmentListener) adapter.getItem(0)).onResumeFragment();
                         ((FragmentListener) adapter.getItem(1)).onPauseFragment();
                         break;
                     case 1:
                         toolbar.setTitle("Profile");
-                        toolbar.findViewById(R.id.menu_sort).setVisibility(View.GONE);
                         ((FragmentListener) adapter.getItem(1)).onResumeFragment();
                         ((FragmentListener) adapter.getItem(0)).onPauseFragment();
                         break;
@@ -146,6 +149,24 @@ public class MainActivity extends AppCompatActivity implements TransferData {
     @Override
     public void setRedditClient(final RedditClient redditClient) {
         this.redditClient = redditClient;
+    }
+
+    @Override
+    public List<Noticia> getNoticiaList() {
+        return list;
+    }
+
+    @Override
+    public void setNoticiaList(final List<Noticia> list) {
+        this.list = list;
+    }
+
+    public Map<String, Listing<Contribution>> getRedditVotes() {
+        return listingMap;
+    }
+
+    public void setRedditVotes(final Map<String, Listing<Contribution>> listingMap) {
+        this.listingMap = listingMap;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

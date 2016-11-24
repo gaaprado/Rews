@@ -29,6 +29,7 @@ public class RedditAccount extends AsyncTask<Void, Void, RedditClient> {
         final RedditClient redditClient = new RedditClient(myUserAgent);
         final Credentials credentials =
                 Credentials.script(username, password, "9CmpIrj9-g_7kQ", "5hO3cFwOLXRng7j4q_BNgvTYA94");
+
         try {
             OAuthData oauth = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(oauth);

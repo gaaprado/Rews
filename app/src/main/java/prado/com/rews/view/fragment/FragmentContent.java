@@ -2,7 +2,6 @@ package prado.com.rews.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import prado.com.rews.helper.FragmentListener;
 import prado.com.rews.model.Noticia;
 import prado.com.rews.rest.ApiClient;
 import prado.com.rews.rest.ApiInterface;
+import prado.com.rews.view.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +30,6 @@ public class FragmentContent extends Fragment implements FragmentListener {
     private LinearLayoutManager linearLayoutManager;
     private EndlessRecyclerViewScrollListener recyclerViewScrollListener;
     private List<Noticia> array;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private View view;
 
     public FragmentContent() {
@@ -41,17 +40,16 @@ public class FragmentContent extends Fragment implements FragmentListener {
         view = inflater.inflate(R.layout.fragment_content, container, false);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        LoadNewSubmissions();
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        // swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        LoadNewSubmissions();
+        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 LoadNewSubmissions();
             }
-        });
+        });*/
         return view;
     }
 
@@ -66,11 +64,11 @@ public class FragmentContent extends Fragment implements FragmentListener {
 
             @Override
             public void onResponse(final Call<List<Noticia>> call, final Response<List<Noticia>> response) {
-                swipeRefreshLayout.setRefreshing(false);
                 if (!response.body().isEmpty()) {
                     array.add(response.body().get(0));
                     array.add(response.body().get(1));
                     progressBar.setVisibility(View.GONE);
+                    ((MainActivity) getActivity()).setNoticiaList(response.body());
                 }
 
                 final RecyclerAdapter recyclerAdapter = new RecyclerAdapter(array, getActivity());
@@ -104,5 +102,6 @@ public class FragmentContent extends Fragment implements FragmentListener {
 
     @Override
     public void onResumeFragment() {
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

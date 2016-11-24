@@ -6,5 +6,6 @@
         android:id="@+id/menu_sort"
         android:icon="@drawable/ic_sort"
         android:title="Sort"
+        android:visible="false"
         app:showAsAction="ifRoom"/>
 </menu>

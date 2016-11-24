@@ -11,13 +11,16 @@ import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.VoteDirection;
 import net.dean.jraw.paginators.UserContributionPaginator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import prado.com.rews.model.Noticia;
 
 /**
  * Created by Gabriel on 20/11/2016.
  */
 
-public class SendSubmission extends AsyncTask<Void, Void, Listing<Contribution>> {
+public class SendSubmission extends AsyncTask<Void, Void, Map<String, Listing<Contribution>>> {
 
     private RedditClient redditClient;
     private Noticia noticia;
@@ -37,22 +40,34 @@ public class SendSubmission extends AsyncTask<Void, Void, Listing<Contribution>>
     }
 
     @Override
-    protected Listing<Contribution> doInBackground(final Void... params) {
-
-        if (type.equals("saved")) {
-            UserContributionPaginator saved =
-                    new UserContributionPaginator(redditClient, type, redditClient.me().getFullName());
-            return saved.next();
+    protected Map<String, Listing<Contribution>> doInBackground(final Void... params) {
+        UserContributionPaginator saved;
+        Map<String, Listing<Contribution>> map = new HashMap<>();
+        if (type.equals("all")) {
+            saved = new UserContributionPaginator(redditClient, "saved", redditClient.me().getFullName());
+            map.put("saved", saved.next());
+            saved = new UserContributionPaginator(redditClient, "liked", redditClient.me().getFullName());
+            map.put("upvoted", saved.next());
+            saved = new UserContributionPaginator(redditClient, "disliked", redditClient.me().getFullName());
+            map.put("downvoted", saved.next());
+            return map;
         } else {
             AccountManager accountManager = new AccountManager(redditClient);
             Submission submission = redditClient.getSubmission(noticia.getId());
             if (submission != null) {
                 try {
-                    if (type.equals("1") || type.equals("-1")) {
-                        accountManager.vote(submission,
-                                type.equals("1") ? VoteDirection.UPVOTE : VoteDirection.DOWNVOTE);
-                    } else {
-                        accountManager.save(submission);
+                    switch (type) {
+                        case "0":
+                            accountManager.unsave(submission);
+                            break;
+                        case "1":
+                        case "-1":
+                            accountManager.vote(submission,
+                                    type.equals("1") ? VoteDirection.UPVOTE : VoteDirection.DOWNVOTE);
+                            break;
+                        case "2":
+                            accountManager.save(submission);
+                            break;
                     }
                 } catch (ApiException e) {
                     e.printStackTrace();
@@ -63,7 +78,7 @@ public class SendSubmission extends AsyncTask<Void, Void, Listing<Contribution>>
     }
 
     @Override
-    protected void onPostExecute(final Listing<Contribution> listing) {
+    protected void onPostExecute(final Map<String, Listing<Contribution>> listing) {
         super.onPostExecute(listing);
         if (listing != null) {
             loadSubmissionsResult.onSuccess(listing);

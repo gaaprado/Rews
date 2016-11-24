@@ -1,6 +1,9 @@
 package prado.com.rews.view.fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,8 @@ import android.widget.Toast;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.models.Contribution;
 import net.dean.jraw.models.Listing;
+
+import java.util.Map;
 
 import prado.com.rews.R;
 import prado.com.rews.adapter.HistoryAdapter;
@@ -127,20 +133,24 @@ public class FragmentAccount extends Fragment implements FragmentListener {
                     recyclerView.setLayoutManager(layoutManager);
 
                     try {
-                        if (redditClient != null) {
-                            SendSubmission sendSubmission =
-                                    new SendSubmission(redditClient, new LoadSubmissionsResult() {
+                        for (int i = 0; i < 3; i++) {
+                            if (redditClient != null) {
+                                SendSubmission sendSubmission =
+                                        new SendSubmission(redditClient, new LoadSubmissionsResult() {
 
-                                        @Override
-                                        public void onSuccess(final ImageDownloaded imageDownloaded) {
-                                        }
+                                            @Override
+                                            public void onSuccess(final ImageDownloaded imageDownloaded) {
+                                            }
 
-                                        @Override
-                                        public void onSuccess(final Listing<Contribution> listing) {
-                                            recyclerView.setAdapter(new HistoryAdapter(listing, getActivity()));
-                                        }
-                                    }, "saved");
-                            sendSubmission.execute();
+                                            @Override
+                                            public void onSuccess(final Map<String, Listing<Contribution>> listing) {
+                                                ((MainActivity) getActivity()).setRedditVotes(listing);
+                                                recyclerView.setAdapter(
+                                                        new HistoryAdapter(listing.get("saved"), getActivity()));
+                                            }
+                                        }, "all");
+                                sendSubmission.execute();
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -170,10 +180,22 @@ public class FragmentAccount extends Fragment implements FragmentListener {
 
         @Override
         public void onClick(final View v) {
-            ((MainActivity) getActivity()).setRedditClient(null);
-            view.findViewById(R.id.linear_layout_login).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.relative_layout_recycler).setVisibility(View.GONE);
-            getActivity().findViewById(R.id.floating_button_loggout).setVisibility(View.GONE);
+            restart(getActivity(), 2);       //            ((MainActivity) getActivity()).setRedditClient(null);
+            //            view.findViewById(R.id.linear_layout_login).setVisibility(View.VISIBLE);
+            //            view.findViewById(R.id.relative_layout_recycler).setVisibility(View.GONE);
+            //            getActivity().findViewById(R.id.floating_button_loggout).setVisibility(View.GONE);
         }
+    }
+
+    public static void restart(Context context, int delay) {
+        if (delay == 0) {
+            delay = 1;
+        }
+        Log.e("", "restarting app");
+        Intent restartIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        PendingIntent intent = PendingIntent.getActivity(context, 0, restartIntent, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + delay, intent);
+        System.exit(2);
     }
 }
